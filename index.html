@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ИИ-Аватар — Пошаговый гайд за 1 000 ₽</title>
+<meta name="description" content="Как создать своего цифрового двойника, который работает на тебя 24/7: больше клиентов, рост личного бренда и полная свобода от съёмок.">
+<meta name="theme-color" content="#0A0E1A">
+
+<!-- Link-preview card for Telegram / WhatsApp / соцсети -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Захвати внимание рынка с помощью ИИ-аватара">
+<meta property="og:description" content="Пошаговый гайд: как создать своего цифрового двойника, который работает на тебя 24/7. Всего за 1 000 ₽.">
+<meta property="og:image" content="og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Захвати внимание рынка с помощью ИИ-аватара">
+<meta name="twitter:description" content="Пошаговый гайд: как создать своего цифрового двойника, который работает на тебя 24/7.">
+<meta name="twitter:image" content="og-image.jpg">
+<style>
+  :root{
+    --bg: #0A0E1A;
+    --glow: rgba(56, 214, 255, 0.65);
+    --glow-soft: rgba(56, 214, 255, 0.25);
+    --max-width: 560px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  /* Snap-scrolling: each block "docks" into place as you swipe/scroll,
+     instead of free-scrolling past it. Native browser behaviour, so it
+     stays smooth and works with touch/trackpad/keyboard alike. */
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+  }
+
+  .page {
+    width: 100%;
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ---------- Desktop-only shell (nav, hero copy, progress dots) ---------- */
+  /* Hidden by default/mobile; each is re-enabled at its own breakpoint below. */
+  .site-nav,
+  .hero-copy,
+  .dots {
+    display: none;
+  }
+
+  /* ---------- Block wrapper + reveal animation ---------- */
+  /* Visible by default (no-JS / preview-mode fallback: Telegram/QuickLook
+     viewers often don't execute JavaScript at all, so content must never
+     depend on JS to become visible). The .js-ready class is added by an
+     inline script at the top of <body>, and only THEN do blocks start
+     hidden and get animated in via IntersectionObserver below. */
+  .block {
+    position: relative;
+    width: 100%;
+    opacity: 1;
+    transform: none;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  html.js-ready .block {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform;
+  }
+
+  html.js-ready .block.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js-ready .block {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------- Image (edge-to-edge, no gap between blocks) ---------- */
+  .block-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background: #1a1f2e;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .block-media img:not(.reveal-piece) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .placeholder-label {
+    color: #5b6478;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* ---------- Invisible clickable CTA overlay ---------- */
+  .cta-zone {
+    position: absolute;
+    left: 6%;
+    right: 6%;
+    /* bottom offset / height tuned per-block below to sit over the drawn button */
+    border-radius: 999px;
+    cursor: pointer;
+    outline: none;
+    background: transparent;
+    transition: box-shadow 0.3s ease, background 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cta-zone:hover,
+  .cta-zone:focus-visible {
+    /* Soft ambient neon bloom — same family as the nav/hero CTA glow —
+       instead of a hard outline/border around the button. */
+    background: rgba(56, 214, 255, 0.05);
+    box-shadow:
+      0 0 26px 6px rgba(56, 214, 255, 0.35),
+      0 0 60px 18px rgba(56, 214, 255, 0.18),
+      0 10px 34px rgba(56, 214, 255, 0.22);
+  }
+
+  /* Touch devices never get :hover, so the button gives no visual
+     feedback at all until the payment page loads — a gentle breathing
+     glow hints it's tappable, and :active gives an instant flash the
+     moment a finger lands on it. */
+  @media (hover: none) and (pointer: coarse) {
+    .cta-zone {
+      animation: ctaPulse 2.6s ease-in-out infinite;
+    }
+
+    .cta-zone:active {
+      animation: none;
+      background: rgba(56, 214, 255, 0.12);
+      box-shadow:
+        0 0 20px 4px rgba(56, 214, 255, 0.55),
+        0 0 46px 14px rgba(56, 214, 255, 0.3);
+    }
+  }
+
+  @keyframes ctaPulse {
+    0%, 100% {
+      box-shadow: 0 0 0 0 rgba(56, 214, 255, 0);
+    }
+    50% {
+      box-shadow:
+        0 0 22px 5px rgba(56, 214, 255, 0.22),
+        0 0 46px 14px rgba(56, 214, 255, 0.10);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-zone {
+      animation: none !important;
+    }
+  }
+
+  /* ---------- Mobile top progress bar (Instagram-stories style) ---------- */
+  .mobile-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 25;
+    display: flex;
+    gap: 5px;
+    padding: 10px 10px 0;
+    padding-top: calc(10px + env(safe-area-inset-top));
+  }
+
+  .mobile-progress .seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .mobile-progress .seg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #17c9ee, #5FE8FF);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+
+  .mobile-progress .seg.is-filled::after {
+    transform: scaleX(1);
+  }
+
+  @media (min-width: 769px) {
+    .mobile-progress { display: none; }
+  }
+
+  /* ---------- Mobile sticky bottom CTA bar ---------- */
+  /* Blocks 1 and 4 already have their own big drawn button, so this bar
+     only shows itself while block 2 or 3 is on screen — otherwise a
+     visitor scrolled past the intro would have no way to buy without
+     scrolling back up. JS toggles .is-shown; hidden by default. */
+  .sticky-cta {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 30;
+    display: flex;
+    justify-content: center;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: linear-gradient(to top, rgba(5, 7, 12, 0.92) 60%, rgba(5, 7, 12, 0));
+    transform: translateY(120%);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .sticky-cta.is-shown {
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .sticky-cta a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 420px;
+    padding: 15px 20px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #17c9ee, #1279e6);
+    color: #04121c;
+    font-weight: 800;
+    font-size: 15px;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(56, 214, 255, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .sticky-cta a:active {
+    transform: scale(0.97);
+    box-shadow: 0 4px 18px rgba(56, 214, 255, 0.45);
+  }
+
+  @media (min-width: 769px) {
+    .sticky-cta {
+      display: none;
+    }
+  }
+
+  /* ---------- "Swipe down" hint on the very first screen ---------- */
+  /* Anchored to a quiet, text-free strip of the artwork (the dark jacket
+     area) instead of floating near the button/paragraph, where it would
+     overlap the existing text. */
+  .scroll-hint {
+    position: absolute;
+    left: 50%;
+    top: 63%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: #d8eefa;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 5;
+    animation: hintReveal 0.6s ease 1.1s forwards;
+  }
+
+  .scroll-hint.is-hidden {
+    animation: hintDismiss 0.4s ease forwards;
+  }
+
+  .scroll-hint svg {
+    animation: hintBounce 1.4s ease-in-out infinite;
+  }
+
+  @keyframes hintReveal {
+    to { opacity: 1; }
+  }
+
+  @keyframes hintDismiss {
+    to { opacity: 0; }
+  }
+
+  @keyframes hintBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+
+  @media (min-width: 769px) {
+    .scroll-hint {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-hint svg { animation: none; }
+  }
+
+  /* Block 1 CTA sits precisely over the bottom pill button in that image.
+     Traced to the button's own solid fill only (not the surrounding
+     text, which shares the same cyan color and previously threw the
+     detection off, making the hover ring taller/offset than the pill). */
+  #block-1 .cta-zone {
+    left: 7.7%;
+    right: 7.9%;
+    bottom: 3.6%;
+    height: 12.5%;
+  }
+
+  /* Block 4 CTA — same, traced to just the button's own fill */
+  #block-4 .cta-zone {
+    left: 6.5%;
+    right: 6.3%;
+    bottom: 5.1%;
+    height: 9.4%;
+  }
+
+  /* ---------- Reveal pieces: cropped elements overlaid on a "gapped"
+     base image, animated in when their parent .block becomes visible.
+     Used on blocks 1, 2, 3 and 4 for different UI panels/icons/cards. ---------- */
+  .reveal-piece {
+    position: absolute;
+    border-radius: 3px;
+    opacity: 1;
+    transform: none;
+    display: block;
+    object-fit: cover;
+  }
+
+  html.js-ready .reveal-piece {
+    opacity: 0;
+    /* Longhand on purpose (not the `transition` shorthand): the shorthand
+       implicitly sets transition-delay too, which — being higher
+       specificity than the per-card .rp-N rules below — was silently
+       overriding their stagger delay back to 0s. Splitting it out lets
+       each .rp-N rule set transition-delay without a specificity fight. */
+    transition-property: opacity, transform;
+    transition-duration: 0.35s, 0.35s;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Default entrance direction: drift up (used by block 3's cards) */
+  html.js-ready .reveal-piece,
+  html.js-ready .rp-slide-up { transform: translateY(26px) scale(0.95); }
+  html.js-ready .rp-slide-left  { transform: translateX(-36px); }
+  html.js-ready .rp-slide-right { transform: translateX(36px); }
+  html.js-ready .rp-pop         { transform: scale(0.5); }
+
+  html.js-ready .block.is-visible .reveal-piece {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---------- Block 3 card grid ---------- */
+  .rp-card, .rp-small { left: 4.25%; width: 90.86%; }
+  .rp-card.rp-1 { top: 28.95%; height: 11.72%; transition-delay: 0.03s; }
+  .rp-card.rp-2 { top: 41.87%; height: 11.48%; transition-delay: 0.09s; }
+  .rp-card.rp-3 { top: 54.78%; height: 11.24%; transition-delay: 0.15s; }
+
+  .rp-small {
+    width: 29.33%;
+    border-radius: 8px;
+  }
+  .rp-small.rp-col2 { left: 35.07%; width: 29.22%; }
+  .rp-small.rp-col3 { left: 65.78%; }
+
+  .rp-small:not(.rp-row2) { top: 71.95%; height: 10.35%; }
+  .rp-small.rp-row2 { top: 85.22%; height: 10.70%; }
+
+  .rp-4 { transition-delay: 0.21s; }
+  .rp-5 { transition-delay: 0.24s; }
+  .rp-6 { transition-delay: 0.28s; }
+  .rp-7 { transition-delay: 0.31s; }
+  .rp-8 { transition-delay: 0.34s; }
+  .rp-9 { transition-delay: 0.37s; }
+
+  /* ---------- Block 1: video cluster + AI chip + checklist ---------- */
+  .rp-b1-left {
+    left: 2.98%; top: 35.47%; width: 27.45%; height: 26.02%;
+    border-radius: 6px;
+    transition-delay: 0.04s;
+  }
+  .rp-b1-ai {
+    left: 68.94%; top: 39.47%; width: 25.53%; height: 8.01%;
+    border-radius: 8px;
+    transition-delay: 0.17s;
+  }
+  .rp-b1-check {
+    left: 68.94%; top: 48.44%; width: 25.53%; height: 9.03%;
+    border-radius: 4px;
+    transition-delay: 0.24s;
+  }
+
+  /* ---------- Block 2: verdict icons + phone row ---------- */
+  .rp-b2-1, .rp-b2-2, .rp-b2-3, .rp-b2-4, .rp-b2-5 {
+    left: 4.04%; width: 10.41%; height: 5.86%;
+    border-radius: 999px;
+  }
+  .rp-b2-1 { top: 23.98%; transition-delay: 0.03s; }
+  .rp-b2-2 { top: 32.96%; transition-delay: 0.09s; }
+  .rp-b2-3 { top: 40.73%; transition-delay: 0.15s; }
+  .rp-b2-4 { top: 53.00%; transition-delay: 0.21s; }
+  .rp-b2-5 { top: 64.53%; transition-delay: 0.27s; }
+
+  .rp-b2-phones {
+    left: 0; width: 100%; top: 74.16%; height: 25.84%;
+    border-radius: 0;
+    transition-delay: 0.33s;
+  }
+
+  html.js-ready .rp-b2-1, html.js-ready .rp-b2-2, html.js-ready .rp-b2-3,
+  html.js-ready .rp-b2-4, html.js-ready .rp-b2-5 {
+    transform: scale(0.4);
+  }
+
+  /* ---------- Block 4: mockups, feature rows, price counter ---------- */
+  .rp-b4-mockups {
+    left: 0; width: 100%; top: 41.47%; height: 21.01%;
+    border-radius: 0;
+    transition-delay: 0.06s;
+  }
+  .rp-b4-f1 {
+    left: 0; width: 100%; top: 64.51%; height: 10.89%;
+    border-radius: 6px;
+    transition-delay: 0.17s;
+  }
+  .rp-b4-f2 {
+    left: 0; width: 100%; top: 77.50%; height: 8.98%;
+    border-radius: 6px;
+    transition-delay: 0.23s;
+  }
+
+  /* Real HTML text standing in for the baked-in "1 000" numeral so it
+     can genuinely count up, positioned exactly over the cut-out gap.
+     Font won't be pixel-identical to the artwork, but bold + glow gets
+     close, and it only needs to hold up for the ~1.5s count animation. */
+  .price-counter {
+    position: absolute;
+    left: 27.42%;
+    top: 27.83%;
+    width: 50.16%;
+    height: 11.37%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 11.2vw;
+    line-height: 1;
+    color: #5FE8FF;
+    text-shadow: 0 0 18px rgba(95, 232, 255, 0.85), 0 0 40px rgba(56, 214, 255, 0.5);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    letter-spacing: -1px;
+    white-space: nowrap;
+  }
+
+  @media (min-width: 769px) {
+    .price-counter { font-size: 42px; }
+  }
+
+  /* ---------- Ken Burns: a slow continuous drift on each block's own
+     base photo while it's on screen — cheap, universal cinematic motion
+     that needs no extra assets and works identically on all 4 blocks. ---------- */
+  .kb-img {
+    transform: scale(1);
+    transition: transform 0.6s ease-out;
+  }
+
+  html.js-ready .kb-img {
+    transform: scale(1.05);
+  }
+
+  html.js-ready .block.is-visible .kb-img {
+    transform: scale(1);
+    transition: transform 2.8s cubic-bezier(0.16, 0.6, 0.35, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .kb-img { transition: none !important; transform: none !important; }
+  }
+
+  /* ---------- Text-only blocks (guarantee, final CTA) ---------- */
+  /* Same 9:16 rhythm as the image blocks, but built from real markup —
+     always crisp, no extra image assets needed, and easy to edit later. */
+  .content-media {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 9% 7%;
+    background:
+      radial-gradient(ellipse 65% 45% at 20% 12%, rgba(56, 214, 255, 0.16), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 85% 88%, rgba(56, 214, 255, 0.10), transparent 60%),
+      var(--bg);
+  }
+
+  .content-eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 214, 255, 0.4);
+    background: rgba(56, 214, 255, 0.07);
+    color: #cdeaf7;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 14px;
+  }
+
+  .content-title {
+    color: #fff;
+    font-weight: 800;
+    font-size: 8.2vw;
+    line-height: 1.14;
+    letter-spacing: -0.3px;
+    margin: 0 0 10px;
+  }
+
+  .content-title .accent {
+    background: linear-gradient(100deg, #7fd9ff, #2c9dff 60%, #17c9ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .content-sub {
+    color: #aab3c5;
+    font-size: 3.9vw;
+    line-height: 1.5;
+    margin: 0 0 26px;
+    max-width: 92%;
+  }
+
+  @media (min-width: 769px) {
+    .content-title { font-size: 30px; }
+    .content-sub { font-size: 15.5px; }
+  }
+
+  /* Reassurance / "what's inside" rows — plain in-flow elements (not
+     absolutely-positioned image cutouts), so they can hold real text of
+     any length and still reuse the same staggered-entrance feel. */
+  .stagger-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(56, 214, 255, 0.28);
+    background: rgba(255, 255, 255, 0.03);
+    margin-bottom: 12px;
+  }
+
+  .stagger-row .icon {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(56, 214, 255, 0.12);
+    color: var(--glow);
+    font-size: 18px;
+  }
+
+  .stagger-row .txt b {
+    display: block;
+    color: #fff;
+    font-size: 3.9vw;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .stagger-row .txt span {
+    display: block;
+    color: #9aa4b8;
+    font-size: 3.5vw;
+    line-height: 1.45;
+  }
+
+  @media (min-width: 769px) {
+    .stagger-row .txt b { font-size: 15px; }
+    .stagger-row .txt span { font-size: 13.5px; }
+  }
+
+  html.js-ready .stagger-row {
+    opacity: 0;
+    transform: translateY(18px);
+    transition-property: opacity, transform;
+    transition-duration: 0.35s, 0.35s;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1), cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html.js-ready .block.is-visible .stagger-row {
+    opacity: 1;
+    transform: none;
+  }
+
+  .stagger-row:nth-of-type(1) { transition-delay: 0.06s; }
+  .stagger-row:nth-of-type(2) { transition-delay: 0.11s; }
+  .stagger-row:nth-of-type(3) { transition-delay: 0.17s; }
+  .stagger-row:nth-of-type(4) { transition-delay: 0.22s; }
+  .stagger-row:nth-of-type(5) { transition-delay: 0.28s; }
+
+  /* Final block: big centered close with price + button, no rows */
+  .final-media {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 9% 9%;
+  }
+
+  .final-media .content-title { font-size: 9vw; }
+  .final-media .content-sub { max-width: 100%; }
+
+  @media (min-width: 769px) {
+    .final-media .content-title { font-size: 32px; }
+  }
+
+  .final-price {
+    font-weight: 800;
+    font-size: 15vw;
+    line-height: 1;
+    color: #5FE8FF;
+    text-shadow: 0 0 18px rgba(95, 232, 255, 0.85), 0 0 40px rgba(56, 214, 255, 0.5);
+    margin: 6px 0 26px;
+  }
+
+  @media (min-width: 769px) {
+    .final-price { font-size: 56px; }
+  }
+
+  .final-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 17px 30px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #17c9ee, #1279e6);
+    color: #04121c;
+    font-weight: 800;
+    font-size: 4.4vw;
+    text-decoration: none;
+    box-shadow: 0 10px 34px rgba(56, 214, 255, 0.32);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .final-cta:active { transform: scale(0.97); }
+
+  @media (min-width: 769px) {
+    .final-cta { font-size: 16px; }
+  }
+
+  .final-note {
+    margin-top: 16px;
+    color: #7c879c;
+    font-size: 3.3vw;
+  }
+
+  @media (min-width: 769px) {
+    .final-note { font-size: 13px; }
+  }
+
+  /* ---------- Text overlays replacing baked-in headline/badge/button
+     text on blocks 1, 3 and 4 — real HTML now, positioned over the
+     matching cut-out gap in each block's photo/background. Reuses the
+     .reveal-piece show/hide mechanism (just not object-fit, which is
+     harmless on a <div>/<a>). ---------- */
+  .text-piece {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    left: 6%;
+    width: 88%;
+  }
+
+  .ov-eyebrow {
+    align-self: flex-start;
+    display: inline-block;
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(56, 214, 255, 0.4);
+    background: rgba(56, 214, 255, 0.07);
+    color: #cdeaf7;
+    font-size: 3.1vw;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+  @media (min-width: 769px) { .ov-eyebrow { font-size: 12.5px; } }
+
+  .ov-h1 {
+    color: #fff;
+    font-weight: 800;
+    font-size: 7.4vw;
+    line-height: 1.16;
+    letter-spacing: -0.3px;
+    margin: 0;
+    text-align: center;
+    align-self: center;
+  }
+  @media (min-width: 769px) { .ov-h1 { font-size: 27px; } }
+
+  .ov-h1 .accent {
+    background: linear-gradient(100deg, #7fd9ff, #2c9dff 60%, #17c9ee);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .ov-sub {
+    color: #aab3c5;
+    font-size: 3.9vw;
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
+    align-self: center;
+  }
+  @media (min-width: 769px) { .ov-sub { font-size: 14.5px; } }
+
+  .ov-paragraph {
+    text-align: center;
+    color: #d7dde8;
+    font-size: 4vw;
+    line-height: 1.5;
+    align-self: center;
+  }
+  .ov-paragraph b { color: var(--glow); }
+  @media (min-width: 769px) { .ov-paragraph { font-size: 14.5px; } }
+
+  .ov-button {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 4.2% 7%;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #17c9ee, #1279e6);
+    color: #04121c;
+    font-weight: 800;
+    font-size: 4.3vw;
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgba(56, 214, 255, 0.32);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .ov-button:active { transform: scale(0.97); }
+  @media (min-width: 769px) { .ov-button { font-size: 16px; padding: 15px 30px; } }
+
+  /* Block 1 positions */
+  .ov-b1-badge     { top: 1.5%;  height: 7%; justify-content: flex-start; }
+  .ov-b1-headline  { top: 10.5%; height: 17%; justify-content: flex-start; }
+  .ov-b1-subtitle  { top: 29%;   height: 5.5%; }
+  .ov-b1-paragraph { top: 75%;   height: 9%; }
+  .ov-b1-button    { top: 85%;   height: 14%; }
+
+  /* Block 3 positions */
+  .ov-b3-headline { top: 1%;    height: 16.5%; align-items: flex-start; justify-content: flex-start; }
+  .ov-b3-subtitle { top: 19%;   height: 7%; }
+  .ov-b3-headline .ov-h1, .ov-b3-subtitle .ov-sub { text-align: left; align-self: flex-start; }
+
+  /* Block 4 positions */
+  .ov-b4-headline { top: 1%;  height: 14%; align-items: flex-start; justify-content: flex-start; }
+  .ov-b4-subtitle { top: 15.5%; height: 9%; }
+  .ov-b4-headline .ov-h1, .ov-b4-subtitle .ov-sub { text-align: left; align-self: flex-start; }
+  .ov-b4-button   { top: 87%; height: 8%; }
+
+  /* Block 2 headline position — narrower than the default text-piece
+     width since the face sits on the right side of this photo */
+  .ov-b2-headline {
+    top: 1%;
+    left: 5%;
+    width: 62%;
+    height: 23%;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  .ov-b2-headline .ov-h1 { text-align: left; align-self: flex-start; }
+  .ov-b2-headline .accent2 { color: #ff4136; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js-ready .reveal-piece {
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
+  @media (min-width: 769px) {
+    /* On larger screens the story blocks no longer take over the whole
+       document — instead they sit inside a self-contained "showcase"
+       card with its own internal scroll/snap, so the page reads as an
+       actual marketing site rather than a phone screenshot stretched
+       across a big screen. */
+    html {
+      scroll-snap-type: none;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    body {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      background:
+        radial-gradient(ellipse 70% 60% at 15% 10%, rgba(56, 214, 255, 0.10), transparent 55%),
+        radial-gradient(ellipse 60% 50% at 90% 90%, rgba(56, 214, 255, 0.08), transparent 60%),
+        var(--bg);
+    }
+
+    /* ---------- Top nav ---------- */
+    .site-nav {
+      display: block;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(10, 14, 26, 0.72);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      color: #fff;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-logo b {
+      color: var(--glow);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #17c9ee, #1279e6);
+      color: #04121c;
+      font-weight: 700;
+      font-size: 14px;
+      text-decoration: none;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      box-shadow: 0 0 0 rgba(56, 214, 255, 0);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(56, 214, 255, 0.35);
+    }
+
+    /* ---------- Main split layout ---------- */
+    .hero-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      gap: 56px;
+    }
+
+    /* ---------- Real HTML hero copy (crisp text, not baked into an image) ---------- */
+    .hero-copy {
+      display: none; /* enabled at the wider breakpoint below */
+    }
+
+    /* ---------- Showcase card (replaces the old phone-bezel mockup) ---------- */
+    .showcase {
+      width: 100%;
+      max-width: 380px;
+      margin: 0 auto;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .showcase-card {
+      position: relative;
+      width: 100%;
+      height: min(760px, 78vh);
+      border-radius: 28px;
+      padding: 2px;
+      background: linear-gradient(160deg, rgba(56, 214, 255, 0.55), rgba(56, 214, 255, 0.05) 40%, rgba(255, 255, 255, 0.08));
+      box-shadow:
+        0 30px 70px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(56, 214, 255, 0.12);
+    }
+
+    .page {
+      height: 100%;
+      max-width: none;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      border-radius: 26px;
+      scrollbar-width: none; /* Firefox */
+      background: var(--bg);
+    }
+
+    .page::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    /* ---------- Progress dots — a calm row under the card ---------- */
+    .dots {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+    }
+
+    .dots .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.22);
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .dots .dot:hover {
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    .dots .dot.is-active {
+      width: 26px;
+      background: var(--glow);
+      box-shadow: 0 0 10px 1px var(--glow-soft);
+    }
+  }
+
+  /* ---------- Full two-column hero on wide desktop screens ---------- */
+  @media (min-width: 1100px) {
+    .hero-wrap {
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .hero-copy {
+      display: block;
+      max-width: 480px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(56, 214, 255, 0.4);
+      background: rgba(56, 214, 255, 0.06);
+      color: #cdeaf7;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+    }
+
+    .hero-badge b {
+      color: var(--glow);
+      margin-left: 4px;
+    }
+
+    .hero-copy h1 {
+      margin: 22px 0 16px;
+      font-size: 44px;
+      line-height: 1.15;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    .hero-copy h1 .accent {
+      background: linear-gradient(100deg, #7fd9ff, #2c9dff 60%, #1279e6);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-sub {
+      margin: 0 0 26px;
+      font-size: 17px;
+      line-height: 1.55;
+      color: #a9b2c6;
+      max-width: 420px;
+    }
+
+    .hero-checks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      list-style: none;
+      margin: 0 0 30px;
+      padding: 0;
+    }
+
+    .hero-checks li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #dfe6f2;
+    }
+
+    .hero-checks li::before {
+      content: '✓';
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: rgba(56, 214, 255, 0.15);
+      color: var(--glow);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .hero-guide {
+      margin: 0 0 30px;
+      padding: 16px 18px;
+      border-left: 2px solid var(--glow);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 0 10px 10px 0;
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #c7cede;
+      max-width: 420px;
+    }
+
+    .hero-guide b {
+      color: #fff;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 30px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #17c9ee, #1279e6);
+      color: #04121c;
+      font-weight: 800;
+      font-size: 16px;
+      text-decoration: none;
+      box-shadow: 0 10px 34px rgba(56, 214, 255, 0.25);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 44px rgba(56, 214, 255, 0.4);
+    }
+
+    /* Gentle staggered entrance for the real hero text on load */
+    .hero-copy > * {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: heroIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .hero-copy > *:nth-child(1) { animation-delay: 0.05s; }
+    .hero-copy > *:nth-child(2) { animation-delay: 0.15s; }
+    .hero-copy > *:nth-child(3) { animation-delay: 0.25s; }
+    .hero-copy > *:nth-child(4) { animation-delay: 0.35s; }
+    .hero-copy > *:nth-child(5) { animation-delay: 0.45s; }
+    .hero-copy > *:nth-child(6) { animation-delay: 0.55s; }
+
+    @keyframes heroIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-copy > * {
+        animation: none;
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+</style>
+</head>
+<body>
+  <script>
+    // Only enable the hidden-then-reveal animation state if JS actually
+    // runs. If this never executes (some in-app/preview viewers block
+    // JS entirely), .block stays at its default opacity:1 and the page
+    // is fully visible with no animation — never a blank dark screen.
+    document.documentElement.classList.add('js-ready');
+  </script>
+
+  <!-- Mobile-only Instagram-stories-style progress bar; hidden on desktop
+       (which already has the side dots). Segments fill as you scroll. -->
+  <div class="mobile-progress" aria-hidden="true">
+    <span class="seg" data-target="block-1"></span>
+    <span class="seg" data-target="block-2"></span>
+    <span class="seg" data-target="block-3"></span>
+    <span class="seg" data-target="block-4"></span>
+    <span class="seg" data-target="block-guarantee"></span>
+    <span class="seg" data-target="block-final"></span>
+  </div>
+
+  <!-- Desktop-only top nav; hidden on mobile -->
+  <header class="site-nav">
+    <div class="nav-inner">
+      <span class="nav-logo">AI · <b>АВАТАР</b></span>
+      <a class="nav-cta" href="https://payform.ru/oqcw7mi/" target="_blank" rel="noopener">Получить гайд →</a>
+    </div>
+  </header>
+
+  <main class="hero-wrap">
+
+    <!-- Desktop-only real-text hero column (only shown ≥1100px); mobile
+         and mid-size desktop rely on the image blocks themselves. -->
+    <section class="hero-copy">
+      <span class="hero-badge">Как новейшая система перевернула рынок <b>в 2026 году?</b></span>
+      <h1>Захвати внимание рынка с помощью <span class="accent">ИИ-аватара</span></h1>
+      <p class="hero-sub">Больше клиентов, рост личного бренда и полная свобода от съёмок.</p>
+      <ul class="hero-checks">
+        <li>Контент 24/7</li>
+        <li>Новые клиенты</li>
+        <li>Рост бренда</li>
+      </ul>
+      <p class="hero-guide"><b>Пошаговый гайд:</b> как создать своего цифрового двойника, который работает на тебя 24/7.</p>
+      <a class="hero-cta" href="https://payform.ru/oqcw7mi/" target="_blank" rel="noopener">Забрать гайд за 1 000 ₽ →</a>
+    </section>
+
+    <section class="showcase">
+      <div class="showcase-card">
+        <div class="page">
+
+    <!-- Block 1: has clickable CTA button area, plus a few UI panels
+         that slide in from their own side (video cluster from the left,
+         AI-chip/checklist from the right) when the block enters view. -->
+    <section class="block" id="block-1">
+      <div class="block-media">
+        <!-- To swap the image later, just replace assets/block1.jpg -->
+        <img class="kb-img" src="assets/block1.jpg" alt="Захвати внимание рынка с помощью ИИ-аватара" loading="eager" fetchpriority="high">
+      </div>
+      <a class="cta-zone" href="https://payform.ru/oqcw7mi/" target="_blank" rel="noopener" aria-label="Забрать гайд — блок 1"></a>
+    </section>
+
+    <section class="block" id="block-2">
+      <div class="block-media">
+        <!-- To swap the image later, just replace assets/block2.jpg -->
+        <img class="kb-img" src="assets/block2.jpg" alt="Почему традиционный контент убивает ваше время и бизнес" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <section class="block" id="block-3">
+      <div class="block-media">
+        <!-- To swap the image later, just replace assets/block3.jpg -->
+        <img class="kb-img" src="assets/block3.jpg" alt="Кому подойдет инструмент и как он экономит время" loading="lazy" decoding="async">
+      </div>
+    </section>
+
+    <section class="block" id="block-4">
+      <div class="block-media">
+        <!-- To swap the image later, just replace assets/block4.jpg -->
+        <img class="kb-img" src="assets/block4.jpg" alt="Стоимость и доступ" loading="lazy" decoding="async">
+      </div>
+      <a class="cta-zone" href="https://payform.ru/oqcw7mi/" target="_blank" rel="noopener" aria-label="Забрать гайд — блок 4"></a>
+    </section>
+
+    <!-- Block 5 (new): reassurance / objection-handling. Pure HTML, no
+         baked image — recaps only claims already made elsewhere on the
+         page (instant + lifetime access, no studio needed, beginner
+         friendly), nothing new or unverifiable added here. -->
+    <section class="block" id="block-guarantee">
+      <div class="content-media">
+        <span class="content-eyebrow">Никаких рисков</span>
+        <h2 class="content-title">Почему это <span class="accent">безопасно</span></h2>
+        <p class="content-sub">Прежде чем оплатить — вот что вы получаете на самом деле.</p>
+
+        <div class="stagger-row">
+          <div class="icon">🎥</div>
+          <div class="txt"><b>Без студии и техники</b><span>Один раз снимаешь видеооснову на телефон — дальше всё делает нейросеть.</span></div>
+        </div>
+        <div class="stagger-row">
+          <div class="icon">🧩</div>
+          <div class="txt"><b>Подходит новичкам</b><span>Гайд написан пошагово — разбираться в нейросетях заранее не нужно.</span></div>
+        </div>
+        <div class="stagger-row">
+          <div class="icon">⚡</div>
+          <div class="txt"><b>Мгновенный доступ</b><span>Материалы открываются сразу после оплаты, без ожидания.</span></div>
+        </div>
+        <div class="stagger-row">
+          <div class="icon">♾️</div>
+          <div class="txt"><b>Доступ навсегда</b><span>Гайд остаётся с вами — не пропадает через месяц или год.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Block 6 (new): final close — restates the offer once more so the
+         page has somewhere to "land" after the price, instead of ending
+         abruptly on block 4's button. -->
+    <section class="block" id="block-final">
+      <div class="content-media final-media">
+        <span class="content-eyebrow">Начни сегодня</span>
+        <h2 class="content-title">Не откладывай <span class="accent">свой аватар</span> на потом</h2>
+        <p class="content-sub">Пошаговый гайд по созданию цифрового двойника — с доступом уже через минуту после оплаты.</p>
+        <div class="final-price">1 000 ₽</div>
+        <a class="final-cta" href="https://payform.ru/oqcw7mi/" target="_blank" rel="noopener">Забрать гайд →</a>
+        <div class="final-note">Мгновенный доступ · Доступ остаётся навсегда</div>
+      </div>
+    </section>
+
+    </div>
+      </div>
+
+      <!-- Desktop-only progress dots; hidden entirely on mobile via CSS -->
+      <nav class="dots" aria-label="Разделы страницы">
+        <button class="dot" type="button" data-target="block-1" aria-label="Перейти к блоку 1"></button>
+        <button class="dot" type="button" data-target="block-2" aria-label="Перейти к блоку 2"></button>
+        <button class="dot" type="button" data-target="block-3" aria-label="Перейти к блоку 3"></button>
+        <button class="dot" type="button" data-target="block-4" aria-label="Перейти к блоку 4"></button>
+        <button class="dot" type="button" data-target="block-guarantee" aria-label="Перейти к блоку 5"></button>
+        <button class="dot" type="button" data-target="block-final" aria-label="Перейти к блоку 6"></button>
+      </nav>
+    </section>
+
+  </main>
+
+  <!-- Mobile-only sticky bottom CTA: appears while block 2/3 is active,
+       since blocks 1 and 4 already carry their own big visible button. -->
+  <div class="sticky-cta" id="sticky-cta">
+    <a href="https://payform.ru/oqcw7mi/" target="_blank" rel="noopener">Забрать гайд за 1 000 ₽ →</a>
+  </div>
+
+<script>
+  // Scroll-triggered fade-in-and-slide-up reveal for each block.
+  // Defensive: if IntersectionObserver isn't available, just show
+  // everything immediately rather than risk a stuck blank page.
+  (function () {
+    var blocks = document.querySelectorAll('.block');
+    var dots = document.querySelectorAll('.dots .dot');
+    var stickyCta = document.getElementById('sticky-cta');
+    var scrollHint = document.getElementById('scroll-hint');
+    var priceCounter = document.getElementById('price-counter');
+    var progressSegs = document.querySelectorAll('.mobile-progress .seg');
+    var ratios = {};
+    var priceCounted = false;
+
+    function runPriceCounter() {
+      if (!priceCounter || priceCounted) return;
+      priceCounted = true;
+      var start = null;
+      var duration = 1400;
+      function step(ts) {
+        if (start === null) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        var value = Math.round(eased * 1000);
+        priceCounter.textContent = value.toLocaleString('ru-RU');
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    function updateActiveDot() {
+      var bestId = null;
+      var bestRatio = 0;
+      Object.keys(ratios).forEach(function (id) {
+        if (ratios[id] > bestRatio) {
+          bestRatio = ratios[id];
+          bestId = id;
+        }
+      });
+
+      if (dots.length) {
+        dots.forEach(function (dot) {
+          dot.classList.toggle('is-active', dot.dataset.target === bestId);
+        });
+      }
+
+      // The sticky mobile CTA only needs to appear for block 2/3 — blocks
+      // 1 and 4 already show their own big button, so showing a second
+      // one at the same time would just be visual clutter.
+      if (stickyCta) {
+        var showSticky = bestId === 'block-2' || bestId === 'block-3' || bestId === 'block-guarantee';
+        stickyCta.classList.toggle('is-shown', showSticky);
+      }
+
+      // Mobile top progress bar (Instagram-stories style): segments up to
+      // and including the current block are "filled", the rest are dim.
+      if (progressSegs.length && bestId) {
+        var order = ['block-1', 'block-2', 'block-3', 'block-4', 'block-guarantee', 'block-final'];
+        var bestIdx = order.indexOf(bestId);
+        progressSegs.forEach(function (seg, i) {
+          seg.classList.toggle('is-filled', i <= bestIdx);
+          seg.classList.toggle('is-current', i === bestIdx);
+        });
+      }
+
+      if (bestId === 'block-4') runPriceCounter();
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      blocks.forEach(function (b) { b.classList.add('is-visible'); });
+      if (dots.length) dots[0].classList.add('is-active');
+      if (priceCounter) priceCounter.textContent = '1 000';
+    } else {
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          } else {
+            // Leaving the viewport (scrolling up past it or down past it)
+            // resets the block so it fades/slides in again next time it
+            // re-enters — the reveal is never a one-time-only effect.
+            entry.target.classList.remove('is-visible');
+          }
+          ratios[entry.target.id] = entry.intersectionRatio;
+        });
+        updateActiveDot();
+      }, {
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+        rootMargin: '0px 0px -60px 0px'
+      });
+
+      blocks.forEach(function (block) { observer.observe(block); });
+    }
+
+    // "Swipe down" hint on the first screen: fades in shortly after load
+    // (see the CSS animation-delay), then dismisses itself either after
+    // a few seconds or as soon as the visitor actually scrolls/swipes —
+    // whichever happens first — so it never lingers and gets in the way.
+    if (scrollHint) {
+      var hideHint = function () {
+        scrollHint.classList.add('is-hidden');
+      };
+      var hintTimer = setTimeout(hideHint, 4200);
+      var scrollRoot = window.matchMedia('(min-width: 769px)').matches
+        ? document.querySelector('.page')
+        : window;
+      var onFirstScroll = function () {
+        clearTimeout(hintTimer);
+        hideHint();
+        scrollRoot.removeEventListener('scroll', onFirstScroll);
+        scrollRoot.removeEventListener('touchmove', onFirstScroll);
+      };
+      if (scrollRoot) {
+        scrollRoot.addEventListener('scroll', onFirstScroll, { passive: true });
+        scrollRoot.addEventListener('touchmove', onFirstScroll, { passive: true });
+      }
+    }
+
+    // Clicking a side dot (desktop only) smooth-scrolls to that block,
+    // inside whichever element actually scrolls (the phone frame on
+    // desktop, the document itself on mobile) — scrollIntoView finds
+    // the right ancestor automatically either way.
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        var target = document.getElementById(dot.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>
